@@ -1,0 +1,101 @@
+{% extends "EC_app/layouts/main.html" %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .hide{
+            display: none;
+          }
+    </style>
+</head>
+<body>
+
+<form method="Post">
+    {% csrf_token %}
+    <div class="form-row">
+      <div class="form-group col-md-6">
+        <label for="inputEmail4">First Name</label>
+        <input type="text" class="form-control" id="inputEmail4" placeholder="Customer first Name" name="c_name">
+      </div>
+      <div class="form-group col-md-6">
+        <label for="inputEmail4">Last Name</label>
+        <input type="text" class="form-control" id="inputEmail4" placeholder="Customer Last Name" >
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group col-md-6">
+        <label for="inputPassword4">Email</label>
+        <input type="Email" class="form-control" id="inputPassword4" placeholder="Email" name="c_mail">
+      </div>
+      <div class="form-group col-md-6">
+        <label for="inputPassword4">Phone Number</label>
+        <input type="text" class="form-control" id="inputPassword4" placeholder="Phone number" name="c_phone">
+      </div>
+    </div>
+    <div class="form-group col-md-6">
+      <label for="inputAddress">Address</label>
+      <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St" name="c_address">
+    </div>
+    <div class="form-group col-md-6">
+      <label for="inputAddress2">Address 2</label>
+      <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
+    </div>
+    <div class="form-row">
+      <div class="form-group col-md-6">
+        <label for="inputCity">City</label>
+        <input type="text" class="form-control" id="inputCity" name="c_city">
+      </div>
+      <div class="form-group col-md-4">
+        <label for="inputState">State</label>
+        <select id="inputState" class="form-control" name="c_state">
+            <option selected>Choose...</option>
+            {% for state in states%}
+                <option value={{state}}>{{state}}</option>
+            {% endfor %}
+        </select>
+      </div>
+      <div class="form-group col-md-2">
+        <label for="inputZip">Zip</label>
+        <input type="text" class="form-control" id="inputZip" name="c_zip">
+      </div>
+    </div>
+  <table class="table table-hover" >
+    <thead>
+      <tr>
+        <th scope="col">Product</th>
+        <th scope="col">Price</th>
+        <th scope="col">Quantity</th>
+        <th scope="col">Total</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for p in shipping_items %}
+      <tr>
+        <td><img src="{{p.products.product_image.url}}" style="width:3em;height:3em" >
+            <p>{{p.products.name}}</p>
+        </td>
+        <td>{{p.products.selling_price}}</td>
+        <td>{{p.quantity}}</td>
+        <td>{{p.amount}}</td>
+      </tr>
+      {% endfor %}
+      <tr>
+        <td><b>Grand Total</b></td>
+        <td></td>
+        <td></td>
+        <td><b>{{Total_amount}}</b></td>
+      </tr>
+    </tbody>
+  </table>
+  <button type="submit" class="btn btn-success" style="width:20em;margin-left:30em">COD | Place Order</button>
+</form>
+
+
+</body>
+</html>
+  {% endblock %}

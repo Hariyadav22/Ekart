@@ -1,0 +1,57 @@
+
+{% extends "EC_app/layouts/main.html" %}
+
+{% block content %}
+
+<div class='py-3 bg-primary'>
+    <div class="container">
+        <a class="text-white" href="{% url 'Ecommerce_app:home' %}">Home/</a>
+        <a class="text-white" href="{% url 'Ecommerce_app:collections' %}">Collections/</a>
+        <a class="text-white" href="{% url 'Ecommerce_app:categoryviews' categorys.slug %}">{{categorys.name}}</a>
+        
+        {% if request.user.is_authenticated %}
+          <p class="float-end text-white col-md-2"><b> Hello, {{request.user | capfirst}} </b></p>
+        {% endif%}
+
+    </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <h1>{{categorys.name}}</h1>
+      <hr>
+      <div class="row">
+      {% for item  in products %}
+      {% if  request.user.is_authenticated %}
+          <div class="col-md-3">
+            <a href="{% url 'Ecommerce_app:productviews' item.category.slug item.slug %}">
+            <div class="card">
+              <div class="card-body">
+                <div class="category-image">
+                  <img src="{{item.product_image.url}} " style="width:14em;height:15em" alt="...">
+                </div>
+                <h4 class="text-center">{{item.name}}</h4>
+              </a>
+                
+                <span class="float-center text-dark "><b>&#8377 {{ item.selling_price | stringformat:'d'}}</b>
+                  <span style='color:red;text-decoration:line-through'>
+                    <span style='color:rgb(103, 101, 101)'>{{ item.original_price | stringformat:'d'}}</span>
+                  </span>
+                  <span class="text-success float-end" style="text-decoration:none"><b>off {{discount | stringformat:'d'}}%</b></span>
+                </span>
+              </div>
+              <div>
+                <p class="text-center">saved amount: {{saved_amo}}</p>
+              </div>
+            </div>
+          </div>
+          {%endif%}
+      {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+

@@ -1,0 +1,111 @@
+
+{% extends "EC_app/layouts/main.html" %}
+
+{% block content %}
+
+<div class='py-3 bg-primary'>
+    <div class="container">
+        <a class="text-white" href="{% url 'Ecommerce_app:home' %}">Home/</a>
+        <a class="text-white" href="{% url 'Ecommerce_app:collections' %}">Collections/</a>
+        <a class="text-white" href="{% url 'Ecommerce_app:categoryviews' viewpro.category.slug %}">{{viewpro.category.name}}/</a>
+        <a class="text-white" href="{% url 'Ecommerce_app:productviews' viewpro.category.slug viewpro.slug %}">{{viewpro.name}}</a>
+
+        {% if request.user.is_authenticated %}
+            <p class="float-end text-white col-md-2"><b> Hello, {{request.user | capfirst}} </b></p>
+        {% endif%}
+        
+    </div>
+</div>
+
+<div class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                {% if viewpro.tag %}
+                                    <label class="product-viewtag" style="border-radius:10%" >{{viewpro.tag}}</label>
+                                {% endif %}
+                                <img src="{{viewpro.product_image.url}}" >
+                            </div>
+                            <div class="col-md-8">
+                                <h2 class="mb-0">
+                                    {{viewpro.name}}
+                                    {% if viewpro.trending %}
+                                        <label style="font-size:16px;" class="float-end badge bg-info trending_tag" >Trending</label>
+                                    {% endif %}
+                                </h2>
+                                <hr>
+                                <label class="me-3">Original Price : <s>Rs {{ viewpro.original_price | stringformat:'d'}}</s></label>
+                                <label class="me-3">Selling Price : <b>Rs {{ viewpro.selling_price | stringformat:'d'}}</b></label>
+                                <p class="mt-3">
+                                    {{ viewpro.small_description }}
+                                </p>
+                                <hr>
+                                {% if viewpro.quantity > 5 %}
+                                        <label style="font-size: 16px;" class="badge bg-success">In Stock </label>
+                                {% elif viewpro.quantity > 0 %}
+                                <p>only {{viewpro.quantity}} available<label style="font-size: 16px;" class="badge bg-warning">Hurry up!</label></p>
+
+                                {% else %}
+                                
+                                <label style="font-size: 16px;" class="badge bg-danger">Out of Stock </label>
+                                {% endif %}
+        
+
+                                <div class="row mt-2">
+                                    
+                                    <div class="col-md-7">
+                                        <br/>
+                                        <form action="{% url 'Ecommerce_app:add_to_cart' viewpro.id %}">
+                                            {% if viewpro.quantity > 0 %}
+                                            <button type="submit" class="btn btn-primary me-3 float-start">Add to Cart <i class=" fa fa-shopping-cart" ></i></button>
+                                            {% endif %}
+                                        </form>
+                                        {% comment %} <form action="{% url 'Ecommerce_app:add_to_visit' viewpro.id %}">
+     
+                                            <button type="submit" class="btn btn-success me-3 float-center">Add to Wishlist <i class=" fa fa-heart"></i></button>
+                                            
+                                    </form> {% endcomment %}
+
+                                    </div>  
+                                </div>
+                            </div>
+                        </div>
+                        <div clas="col-md-12">
+                            <hr>
+                            <h3>Description</h3>
+                            <p class="mt-3">
+                                <details>
+                                    {{ viewpro.description}}
+                                </details>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- <script>
+    var range=JSON.parse("{{data|escapejs}}");
+    function buttonClickinc(){
+        var qty = document.getElementById('inc').value;
+        if (qty< range){
+            document.getElementById('inc').value = ++qty;
+
+        }
+    }
+    var i = range;
+    function buttonClickdic(){
+        var qty=document.getElementById('inc').value;
+        if (qty>1){
+            document.getElementById('inc').value -=1;
+        }
+    }
+</script> -->
+{% endblock content %}
+
+

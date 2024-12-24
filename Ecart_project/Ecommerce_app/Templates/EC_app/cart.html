@@ -1,0 +1,171 @@
+{% extends "EC_app/layouts/main.html" %}
+
+{% block content %}
+<select  name="dropDown" id="dropDown" style="float:right;margin: 1em 3em 0em; width:10em;height:2em;text-align:center">
+    <option style="display:none">Categorys</option> 
+    {% for i in cart_items %}
+    <option value="{% url 'Ecommerce_app:categoryviews' i.products.category.slug %}" style="display:none" >{{i.products.name}}</option> 
+    <option value="{% url 'Ecommerce_app:categoryviews' i.products.category.slug %}" name="category">{{i.products.name}}</option> 
+    {% endfor %}
+</select>
+
+<html lang="en">
+ 
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Document</title>
+
+    <style>
+
+        /* Add CSS styles for flex container and items */
+
+        .product-list {
+
+            display: flex;
+
+            flex-wrap: wrap; /* Allow items to wrap to the next row if necessary */
+
+            justify-content: space-between; /* Space items evenly along the main axis */
+
+            list-style: none; /* Remove list styles */
+
+            padding: 0;
+
+        }
+ 
+
+        .product-item {
+
+             
+
+            flex: 1; /* Grow to fill available space evenly */
+
+             /* Limit item width to avoid overcrowding */
+
+            margin: 10px; /* Add spacing between items */
+
+            border: 1px solid #ccc; /* Add a border for visual separation */
+
+            padding: 10px;
+
+            text-align: center;
+
+        }
+ 
+
+        /* Style the "Buy Now" button */
+
+        .buy-now-button {
+
+            display: block;
+
+            margin-top: 10px;
+
+            background-color: #007bff;
+
+            color: #fff;
+
+            text-decoration: none;
+
+            padding: 5px 10px;
+
+            border-radius: 5px;
+
+        }
+
+    </style>
+
+</head>
+ 
+
+<body>
+ 
+    <span >
+    <h1 >Your Shopping Cart</h1>
+    
+        
+    </span>
+    
+
+    <div class="product-list">
+ 
+
+    {% for item in cart_items %}
+     
+    <div class="product-item"> 
+        <img src="{{item.products.product_image.url}}" style="width:5em;height:5em" >
+        <p>{{ item.products.name }}({{ item.quantity }})</p>
+        <p>Price: ${{ item.products.selling_price }}</p>
+        
+        <form action="/cart/" method="post" style="display:inline;">
+            {% csrf_token %}
+            {% if item.quantity < item.products.quantity %}
+            <input type="text"  value="{{item.products.name}}" name="inc" style="display: none;">
+            <button type="submit" class="btn btn-success" >
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up" viewBox="0 0 16 16">
+               <path fill-rule="evenodd" d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5"></path>
+               </svg>
+                inc
+              </button>
+            {% else %}
+            <button type="button" class="btn btn-info " >Exiced</button>
+            {% endif %}
+        </form>
+        <a href="{% url 'Ecommerce_app:remove_from_cart' item.id %}" class="btn btn-danger" style="width:5em;display:inline;">Remove</a>
+        <form action="/cart/" method="post" style="display:inline-flex;">
+            {% csrf_token %}
+        {% if item.quantity > 1 %}
+            <input type="text" value="{{item.products.name}}" name="dec" style="display: none;">
+            <button type="submit" class="btn btn-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1"></path>
+            </svg>
+                dec
+              </button>
+            {% endif %}
+        </form>
+
+
+        
+        
+    </div>
+    
+    {% empty %}
+
+    <p >Your cart is empty.</p>
+    {% endfor %}
+
+    </div>
+ 
+
+    <p>Total Price: ${{ total_price }}</p>
+    
+    
+    {% comment %} <a href="{% url 'Ecommerce_app:categoryviews' i.products.category.slug %}"><img src="https://img.icons8.com/?size=96&id=UgMM7CLn8rhx&format=png" ></a> {% endcomment %}
+    
+    <a href="/shipping" class="btn btn-success  " style="width:10em;margin-left:33em">Check Out !</a>
+
+
+    <script>
+        
+        var dropDownValue = document.getElementById("dropDown");
+
+            dropDownValue.onchange = function()
+            {
+            if(this.selectedIndexn !== 0)
+            {
+                window.location.href=this.value;
+            }
+            };
+    </script>
+    
+</body>
+</html>
+
+{% endblock %}
+
+

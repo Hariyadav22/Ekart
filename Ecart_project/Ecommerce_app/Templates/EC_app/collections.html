@@ -1,0 +1,59 @@
+
+{% extends "EC_app/layouts/main.html" %}
+
+{% block content %}
+
+<div class='py-3 bg-primary'>
+  <div class="container">
+      <a class="text-white" href="{% url 'Ecommerce_app:home' %}">Home/</a>
+      <a class="text-white" href="{% url 'Ecommerce_app:collections' %}">Collections</a>
+      <span>
+        <form action="{% url 'Ecommerce_app:search' %}" method="get" style="float:right">
+          {% csrf_token %}
+          <input list="collections" name="search" placeholder="Collections">
+          <datalist id="collections">
+          {% for i in category %}
+            <option value="{{i.name}}">
+          {% endfor %}
+          </datalist>
+          <button type="submit" class="btn btn-dark me-3 float-center">Search</button>
+
+        </form>
+      </span>
+      
+      
+      {% if request.user.is_authenticated %}
+      <p class="float-end text-white col-md-2"><b> Hello, {{request.user | capfirst}} </b></p>
+      {% endif%}
+
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <span><h1>Collections</h1></span>
+      <hr>
+      <div class="row">
+      {% for item  in category %}
+          <div class="col-md-3">
+            <a href="{% url 'Ecommerce_app:categoryviews' item.slug %}">
+            <div class="card">
+              <div class="card-body">
+                <div class="category-image">
+                  <img src="{{item.image.url}} " style="width:14em;height:15em" alt="...">
+                </div>
+                <h4 class="text-center">{{item.name}}</h4>
+              </div>
+            </div>
+            </a>
+          </div>
+      {% endfor %}
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock content %}
+
+

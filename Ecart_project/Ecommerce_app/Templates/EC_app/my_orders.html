@@ -1,0 +1,114 @@
+
+{% extends "EC_app/layouts/main.html" %}
+
+{% block content %}
+<html lang="en">
+ 
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Document</title>
+    <style>
+        .hide{
+          display: none;
+        }
+      </style>
+
+    <style>
+
+        /* Add CSS styles for flex container and items */
+
+        .product-list {
+
+            display: flex;
+
+            flex-wrap: wrap; /* Allow items to wrap to the next row if necessary */
+
+            justify-content: space-between; /* Space items evenly along the main axis */
+
+            list-style: none; /* Remove list styles */
+
+            padding: 0;
+
+        }
+ 
+
+        .product-item {
+
+             
+
+            flex: 1; /* Grow to fill available space evenly */
+
+             /* Limit item width to avoid overcrowding */
+
+            margin: 10px; /* Add spacing between items */
+
+            border: 1px solid #ccc; /* Add a border for visual separation */
+
+            padding: 10px;
+
+            text-align: center;
+
+        }
+ 
+
+        /* Style the "Buy Now" button */
+
+        .buy-now-button {
+
+            display: block;
+
+            margin-top: 10px;
+
+            background-color: #007bff;
+
+            color: #fff;
+
+            text-decoration: none;
+
+            padding: 5px 10px;
+
+            border-radius: 5px;
+
+        }
+
+    </style>
+
+</head>
+ 
+
+<body>
+ 
+    <span >
+    <h1 >Your orders</h1>
+    
+        
+    </span>
+    
+
+    <div class="product-list">
+ 
+
+    {% for item in order_items %}
+     
+    <div class="product-item"> 
+        {% if request.user %}
+        <img src="{{item.product.product_image.url}}" style="width:5em;height:5em" >
+        <p>{{ item.product.name }}</p>
+        <p>Price: ${{ item.product.selling_price }}</p>
+         <h5>Address</h5>
+        <p>{{ item.Shipping.name }}</p>
+        <p>{{ item.Shipping.address }}</p>
+        <p>{{ item.Shipping.phone }}</p>
+        <p>{{ item.Shipping.country }}</p>
+
+        {% endif %}
+    </div>
+    {% empty %}
+    <p >Empty.</p>
+    {% endfor %}
+    </div>
+{% endblock %}

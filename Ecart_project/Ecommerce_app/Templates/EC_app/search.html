@@ -1,0 +1,63 @@
+{% extends "EC_app/layouts/main.html" %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .hide{
+      display: none;
+    }
+  </style>
+  <!-- <script>
+    document.getElementsByClassName('hide').value='hari';
+    a=document.getElementsByClassName('hide').value
+    console.log(a)
+  </script> -->
+</head>
+<body>
+  
+
+
+<div class='py-3 bg-primary'>
+    <div class="container">
+        <a class="text-white" href="{% url 'Ecommerce_app:home' %}">Home/</a>
+        <a class="text-white" href="{% url 'Ecommerce_app:collections' %}">Collections</a>
+        {% if request.user.is_authenticated %}
+        <p class="float-end text-white col-md-2"><b> Hello, {{request.user | capfirst}} </b></p>
+        {% endif%}
+  
+    </div>
+  </div>
+  
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <span><h1>Collections</h1></span>
+        <hr>
+        <div class="row">
+        {% for item  in object_list %}
+            <div class="col-md-3">
+              <a href="{% url 'Ecommerce_app:categoryviews' item.slug %}">
+              <div class="card">
+                <div class="card-body">
+                  <div class="category-image">
+                    <img src="{{item.image.url}} " style="width:14em;height:15em" alt="...">
+                  </div>
+                  <h4 class="text-center">{{item.name}}</h4>
+                </div>
+              </div>
+              </a>
+            </div>
+        {% endfor %}
+        </div>
+      </div>
+    </div>
+  
+  </div>
+</body>
+</html>
+{% endblock content %}
